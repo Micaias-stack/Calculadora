@@ -34,13 +34,13 @@ with st.sidebar:
     
     if sobra_final <= 0:
         st.error("Atenção: Você está no vermelho!")
+        p_segura = 0
     else:
         p_segura = sobra_final * 0.25
         st.success(f"Parcela Segura: R$ {p_segura:.2f}")
 
 # --- CORPO PRINCIPAL DO APP ---
 st.title("⚖️ NegociaFácil AI")
-st.write("Use os dados do seu orçamento ao lado para analisar suas dívidas abaixo.")
 
 aba1, aba2 = st.tabs(["📊 Cálculo da Dívida", "🤖 Analista de IA"])
 
@@ -73,25 +73,24 @@ with aba2:
             try:
                 client = Groq(api_key=api_key)
                 
-                # Contexto rico para a IA
                 prompt_ia = f"""
                 Você é um consultor de dívidas. 
                 Dados do cliente:
                 - Dívida Original: R$ {v_original:.2f}
                 - Tempo: {meses_atraso} meses
                 - Sobra Mensal Real: R$ {sobra_final:.2f}
-                - Parcela Máxima que ele aguenta: R$ {p_segura if sobra_final > 0 else 0:.2f}
+                - Parcela Máxima que ele aguenta: R$ {p_segura:.2f}
                 
                 Proposta recebida: "{proposta_texto}"
                 
-                Diga se a proposta é abusiva, se cabe no orçamento de R$ {sobra_final:.2f} 
-                e sugira uma contraproposta baseada no valor de R$ {valor_referencia:.2f}.
+                Diga se a proposta é abusiva, se cabe no orçamento dele 
+                e sugira uma contraproposta baseada no valor justo de R$ {valor_referencia:.2f}.
                 """
                 
-                with st.spinner("A IA está analisando..."):
+                with st.spinner("Conectando com a IA atualizada..."):
                     chat_completion = client.chat.completions.create(
                         messages=[{"role": "user", "content": prompt_ia}],
-                        model="llama3-70b-8192",
+                        model="llama-3.3-70b-versatile", # MODELO ATUALIZADO
                     )
                     st.subheader("💡 Parecer do Especialista AI")
                     st.info(chat_completion.choices[0].message.content)
