@@ -10,7 +10,7 @@ st.markdown("---")
 # --- BARRA LATERAL ---
 with st.sidebar:
     st.header("🔑 Acesso")
-    api_key = st.text_input("Sua Groq API Key:", type="password")
+    api_key = st.text_input("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:"type="123")
     st.info("Crie sua chave gratuita em: https://console.groq.com/keys")
 
 # --- ENTRADA DE DADOS ---
